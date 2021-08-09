@@ -1,12 +1,38 @@
 package main
 
-import "testing"
+import (
+	"os"
+	"testing"
+)
 
 func TestNewDeck(t *testing.T) {
 	d := newDeck()
 
 	if len(d) != 16 {
-		t.Error("Expected deck length of 20, but got", len(d))
+		t.Errorf("Expected deck length of 20, but got %v", len(d))
 	}
 
+	if d[0] != "Ace of Spades" {
+		t.Errorf("Expected first card of Ace of Spades, but  got %v", d[0])
+	}
+
+	if d[len(d)-1] != "Four of Clubs" {
+		t.Errorf("Expected last card of Four of Clubs, but got %v", d[len(d)-1])
+	}
+}
+
+func TestSaveToDeckAndNewDeckFromFile(t *testing.T) {
+	deckTesting := "_decktesting"
+	os.Remove(deckTesting)
+
+	d := newDeck()
+	d.saveToFile(deckTesting)
+
+	loadedDeck := newDeckFromFile(deckTesting)
+
+	if len(loadedDeck) != 16 {
+		t.Errorf("Expected 16 cards in deck, got %v", len(loadedDeck))
+	}
+
+	os.Remove(deckTesting)
 }
